@@ -87,9 +87,7 @@ class Data_gen:
                 playlists = findPlaylistResponsePlaylists["items"]
                 if playlists == None:
                     continue
-                
-                    
-                    break
+
                 for j in range(len(playlists)):
                     
                     playlistId = playlists[j]["id"]
@@ -114,7 +112,6 @@ class Data_gen:
                             if itemTrackId == None:
                                 continue
                             trackIdllist = [itemTrackId]
-                            #print(trackIdllist)
 
                             for trackId in trackIdllist:
                                 if trackId == None:
@@ -123,7 +120,7 @@ class Data_gen:
                                     tracksFrequency[trackId] += 1
                                 if trackId not in tracksFrequency:
                                     tracksFrequency[trackId] = 1
-                    #if we have less the 50 playlists in the last search we 
+                #if we have less the 50 playlists in the last search we 
                 if len(playlists) != 50:
                     print(word, "had", (i*50+len(playlists)), "playlists \n")
                     break
@@ -137,12 +134,48 @@ class Data_gen:
 
     def get_track_Metadata(self, csvFileName):
         idlist = []
+        totalAggregatedFeatures = {}
+
         #Loads the 100 track ids from csv file given as parameter. 
-        trackIds = np.loadtxt(csvFileName,delimiter=", ", dtype=str)
+        trackIds = np.loadtxt("trackFrequencies\\"+csvFileName,delimiter=", ", dtype=str)
         for j in range(len(trackIds)):
             idlist.append(trackIds[j][0])
-        all_features = self.spotifyacc.get_song_features(idlist)
-        print(all_features[0])
+        all_Features = self.spotifyacc.get_song_features(idlist)
+        #Goes through all the features and aggregates them into seperate variables
+
+        totalAggregatedFeatures["danceability"] = 0
+        totalAggregatedFeatures["energy"] = 0
+        totalAggregatedFeatures["key"] = 0
+        totalAggregatedFeatures["loudness"] = 0
+        totalAggregatedFeatures["speechiness"] = 0
+        totalAggregatedFeatures["acousticness"] = 0
+        totalAggregatedFeatures["instrumentalness"] = 0
+        totalAggregatedFeatures["liveness"] = 0
+        totalAggregatedFeatures["tempo"] = 0
+
+        #gets the sum of all the 
+        for num in range(len(trackIds)):
+            current_Features = all_Features[num]
+            totalAggregatedFeatures["danceability"] += current_Features["danceability"]
+            totalAggregatedFeatures["energy"] += current_Features["energy"]
+            totalAggregatedFeatures["key"] += current_Features["key"] #should probably not use. Music theory stuff. Ask Jonas if you want to know. 
+            totalAggregatedFeatures["loudness"] += current_Features["loudness"]
+            totalAggregatedFeatures["speechiness"] += current_Features["speechiness"]
+            totalAggregatedFeatures["acousticness"] += current_Features["acousticness"]
+            totalAggregatedFeatures["instrumentalness"] += current_Features["instrumentalness"]
+            totalAggregatedFeatures["liveness"] += current_Features["liveness"]
+            totalAggregatedFeatures["tempo"] += current_Features["tempo"]
+        
+        #find the mean value for every feature. basically divides the sum by 100
+        for feature in totalAggregatedFeatures:
+            totalAggregatedFeatures[feature] = totalAggregatedFeatures[feature]/len(trackIds)
+        return totalAggregatedFeatures
+        
+ 
+
+            
+
+
         
 
 
