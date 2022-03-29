@@ -18,9 +18,9 @@ class Spotify:
             # Authorize via spotify and save the auth token in _sp
             self._sp = spotipy.Spotify(auth=auth_token)
 
-    def find_playlists(self, location: str, offset = 0):
+    def find_playlists(self, location: str, offset = 0, limit = 50):
         # Search for the term "location" and return the first playlist
-        result = self._sp.search(location, type="playlist", limit=50, offset= offset)
+        result = self._sp.search(location, type="playlist", limit=limit, offset= offset)
         # Find the ID of the playlist (nested dict)
         return result
 

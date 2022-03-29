@@ -18,7 +18,7 @@ def main(argv):
     token: str = argv[0]
     data_gen = Data_gen(token)
     #For loop that generates the csv files. we could use QuackLocationType istead of numbers, but we want to skip unknown.
-    for location in range(1, 8):
+    for location in range(1,8):
         #gets the search words
         words = data_gen.get_searchWords(location)
         #gets the track frequency fo the words given

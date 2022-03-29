@@ -49,31 +49,32 @@ class Data_gen:
             #search words on spotify for each location type. very rough
             case 1:
                 #church
-                return ["church", "christ"]
+                return ["church", "christ", "god", "jesus"]
             case 2:
                 #education
-                return ["university"]
+                return ["university", "study", "class"]
             case 3:
                 #cemetery
-                return ["undeath", "undead"]
+                return ["crypt", "tomb NOT tomboy", "grave", "cemetery"]
             case 4:
                 #forest
-                return ["forest", "woods"]
+                return ["forest", "woods", "wildlife", "nature"]
             case 5:
                 #beach
-                return ["beach"]
+                return ["beach", "sun", "summer", "heat"]
             case 6:
                 #urban
                 return ["ghetto", "street", "urban"]
             case 7:
                 #nigtLife
-                return ["bar", "club"]
+                return ["bar", "club", "party", "night"]
 
     def get_trackFrequency(self, searchWords):
         foundPlaylistsId = []
         tracksFrequency = {}
+        searchiterations = 1
         for word in searchWords:
-            for i in range(2):
+            for i in range(searchiterations):
                 # print("\n")
                 # print(tracksFrequency)
                 #Gets playlists from spotify based on the searchwords, i is the offset.
@@ -126,7 +127,7 @@ class Data_gen:
                 if len(playlists) != 50:
                     print(word, "had", (i*50+len(playlists)), "playlists \n")
                     break
-                if i == 1 and len(playlists) == 50:
+                if i == (searchiterations-1) and len(playlists) == 50:
                     print(word, "had the full", (i*50 + 50), "playlists \n")
 
         top100Frequencykeyvalue = collections.Counter(tracksFrequency).most_common(100)
