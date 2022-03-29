@@ -1,9 +1,7 @@
 from playlists_gen import Data_gen
 from enum import Enum
-import os
-import sys, getopt
+import sys
 import numpy as np
-import csv
 class QuackLocationType(Enum):
     unknown = 0
     church = 1
@@ -19,17 +17,21 @@ def main(argv):
     token: str = argv[0]
     data_gen = Data_gen(token)
     #For loop that generates the csv files. we could use QuackLocationType istead of numbers, but we want to skip unknown.
-    for location in range(1,8):
-        #gets the search words
-        words = data_gen.get_searchWords(location)
-        #gets the track frequency fo the words given
-        locationtrackFrequency =data_gen.get_trackFrequency(words)
-        #saves the returned list of 100 songs ids as a csv file
-        np.savetxt("trackFrequencies\\"+QuackLocationType(location).name+"Tracks.csv", locationtrackFrequency, delimiter=", ", fmt ='% s')
-
+    # for location in range(1,8):
+    #     #gets the search words
+    #     words = data_gen.get_searchWords(location)
+    #     #gets the track frequency fo the words given
+    #     locationtrackFrequency =data_gen.get_trackFrequency(words)
+    #     #saves the returned list of 100 songs ids as a csv file in the folder trackFrequencies
+    #     np.savetxt("trackFrequencies\\"+QuackLocationType(location).name+"Tracks.csv", locationtrackFrequency, delimiter=", ", fmt ='% s')
+    
+    #loops through the quack location types again and loads the previously generated csv files in order to generate location feature vectors
     for location2 in range(1,8):
+        #loads the csv file
         csvfilename = QuackLocationType(location2).name + "Tracks.csv"
-        locationFeatureVector = list(data_gen.get_track_Metadata(csvfilename).items())
+        #calls get_track_metaData which returns a dict. It is easier to turn a list into a csv file, so the output is converted to a list.
+        locationFeatureVector = list(data_gen.get_track_metadata(csvfilename).items())
+        #saves the list to a csv file in the featureVectors folder
         np.savetxt("featureVectors\\" + QuackLocationType(location2).name+"LocationFeatureVector.csv", locationFeatureVector, delimiter=", ", fmt ='% s')
 
         

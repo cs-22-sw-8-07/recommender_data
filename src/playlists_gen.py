@@ -1,16 +1,9 @@
 from cgi import print_directory
-from distutils.command.config import config
-from itertools import count
 from msilib.schema import SelfReg
-from typing_extensions import Self
-from unittest import result
 from webbrowser import get
 from numpy import take, var
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
 import configparser
 import os
-import sys, getopt
 from configparser import ConfigParser
 from typing import Optional
 from spotify import Spotify
@@ -40,7 +33,6 @@ class Data_gen:
         config = _load_config()
         self.spotifyacc = Spotify(config)
         self.spotifyacc.connect_spotify(self.auth_token)
-        #self._sp = spotipy.Spotify(auth=token)
 
         
 
@@ -68,6 +60,7 @@ class Data_gen:
             case 7:
                 #nigtLife
                 return ["bar", "club", "party", "night"]
+
 
     def get_trackFrequency(self, searchWords):
         foundPlaylistsId = []
@@ -132,11 +125,12 @@ class Data_gen:
         #top100tracks = [i[0] for i in top100Frequencykeyvalue]
         return top100Frequencykeyvalue
 
-    def get_track_Metadata(self, csvFileName):
+
+    def get_track_metadata(self, csvFileName):
         idlist = []
         totalAggregatedFeatures = {}
 
-        #Loads the 100 track ids from csv file given as parameter. 
+        #Loads the 100 track ids from csv file given as parameter from the folder trackFrequencies. 
         trackIds = np.loadtxt("trackFrequencies\\"+csvFileName,delimiter=", ", dtype=str)
         for j in range(len(trackIds)):
             idlist.append(trackIds[j][0])
@@ -155,7 +149,6 @@ class Data_gen:
         totalAggregatedFeatures["tempo"] = 0
 
         #Goes through all the features and aggregates them into seperate variables
-
         for num in range(len(trackIds)):
             current_Features = all_Features[num]
             totalAggregatedFeatures["danceability"] += current_Features["danceability"]
