@@ -28,3 +28,6 @@ class Spotify:
         # Retrieve tracks from the given playlist, only return the track id
         return self._sp.playlist_items(playlist_id)
         
+    def get_song_features(self, song_ids: str):
+        #retrive meta data on tracks given a specific track id. Returns a list of meta data values
+        return self._sp.audio_features(song_ids)

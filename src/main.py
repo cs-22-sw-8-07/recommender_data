@@ -1,4 +1,4 @@
-from playlists_gen import Playlist_gen
+from playlists_gen import Data_gen
 from enum import Enum
 import os
 import sys, getopt
@@ -16,15 +16,21 @@ class QuackLocationType(Enum):
 def main(argv):
     #argv=["BQDJ8m31rgfrL9K4XzE5jLo8_JYnkPJvSXYfTeijK2lEoE7t2BIE_NXqlmeBOwGSvZLzjMVkn6nTZWX2cLZ_OqqzxMguu7bRqjj87Zpo7btCTi8XFa6fnlvQFD5XphGgoFUn8b2IgWo6nj2J_jc8WOeb23k_mDkQ5uS3YAM"]
     token: str = argv[0]
-    playlist_gen = Playlist_gen(token)
-    #we could use QuackLocationType but we want to skip unknown.
+    data_gen = Data_gen(token)
+    #For loop that generates the csv files. we could use QuackLocationType istead of numbers, but we want to skip unknown.
     for location in range(1, 8):
         #gets the search words
         
-        words = playlist_gen.get_searchwords(location)
+        words = data_gen.get_searchWords(location)
         #gets the track frequency fo the words given
-        locationtrackFrequency =playlist_gen.get_trackFrequency(words)
+        locationtrackFrequency =data_gen.get_trackFrequency(words)
+        #saves the returned list of 100 songs ids as a csv file
         np.savetxt(QuackLocationType(location).name+"Tracks.csv", locationtrackFrequency, delimiter=", ", fmt ='% s')
+
+    # for location2 in range(1,8):
+    #     csvfilename = QuackLocationType(location2).name + "Tracks.csv"
+    #     print(csvfilename)
+    #     data_gen.get_track_Metadata(csvfilename)
 
 if __name__ == "__main__":
     main(sys.argv[1:])

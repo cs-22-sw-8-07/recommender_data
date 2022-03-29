@@ -13,6 +13,7 @@ import sys, getopt
 from configparser import ConfigParser
 from typing import Optional
 from spotify import Spotify
+import numpy as np
 
 import collections
 
@@ -29,7 +30,7 @@ def _load_config() -> Optional[ConfigParser]:
 
         return config
 
-class Playlist_gen:
+class Data_gen:
     auth_token: str
     spotifyacc: object
 
@@ -38,11 +39,11 @@ class Playlist_gen:
         config = _load_config()
         self.spotifyacc = Spotify(config)
         self.spotifyacc.connect_spotify(self.auth_token)
-        self._sp = spotipy.Spotify(auth=token)
+        #self._sp = spotipy.Spotify(auth=token)
 
         
 
-    def get_searchwords(self, x):
+    def get_searchWords(self, x):
         match x:
             #search words on spotify for each location type. very rough
             case 1:
@@ -71,7 +72,7 @@ class Playlist_gen:
         foundPlaylistsId = []
         tracksFrequency = {}
         for word in searchWords:
-            for i in range(20):
+            for i in range(2):
                 # print("\n")
                 # print(tracksFrequency)
                 #Gets playlists from spotify based on the searchwords, i is the offset.
@@ -84,11 +85,7 @@ class Playlist_gen:
                 playlists = findPlaylistResponsePlaylists["items"]
                 if playlists == None:
                     continue
-                if len(playlists) != 50:
-                    print(word, "had", (i*50+len(playlists)), "playlists \n")
-                    break
-                if i == 19 and len(playlists) == 50:
-                    print(word, "had the full", (i*50 + 50), "playlists \n")
+                
                     
                     break
                 for j in range(len(playlists)):
@@ -124,11 +121,23 @@ class Playlist_gen:
                                     tracksFrequency[trackId] += 1
                                 if trackId not in tracksFrequency:
                                     tracksFrequency[trackId] = 1
+                    #if we have less the 50 playlists in the last search we 
+                if len(playlists) != 50:
+                    print(word, "had", (i*50+len(playlists)), "playlists \n")
+                    break
+                if i == 1 and len(playlists) == 50:
+                    print(word, "had the full", (i*50 + 50), "playlists \n")
+
         top100Frequencykeyvalue = collections.Counter(tracksFrequency).most_common(100)
         #removes the value in the keyvalue pair and returns a list of track ids
         #top100tracks = [i[0] for i in top100Frequencykeyvalue]
         return top100Frequencykeyvalue
 
+    def get_track_Metadata(self, csvFileName):
+        #Loads the 100 track ids from csv file given as parameter. 
+        trackIds = np.loadtxt(csvFileName,delimiter=", ", dtype=str)
+        print(trackIds[0])
+        
 
 
                             
