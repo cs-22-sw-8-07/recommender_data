@@ -1,3 +1,4 @@
+from cgi import print_directory
 from distutils.command.config import config
 from itertools import count
 from msilib.schema import SelfReg
@@ -54,7 +55,7 @@ class Data_gen:
                 return ["university"]
             case 3:
                 #cemetery
-                return ["graveyard", "cemetery"]
+                return ["undeath", "undead"]
             case 4:
                 #forest
                 return ["forest", "woods"]
@@ -63,7 +64,7 @@ class Data_gen:
                 return ["beach"]
             case 6:
                 #urban
-                return ["urban", "street"]
+                return ["ghetto", "street", "urban"]
             case 7:
                 #nigtLife
                 return ["bar", "club"]
@@ -76,7 +77,7 @@ class Data_gen:
                 # print("\n")
                 # print(tracksFrequency)
                 #Gets playlists from spotify based on the searchwords, i is the offset.
-                findPlaylistResponse = self.spotifyacc.find_playlists(searchWords, i)
+                findPlaylistResponse = self.spotifyacc.find_playlists(word, i)
                 if findPlaylistResponse == None:
                     continue
                 findPlaylistResponsePlaylists = findPlaylistResponse["playlists"]
@@ -134,9 +135,13 @@ class Data_gen:
         return top100Frequencykeyvalue
 
     def get_track_Metadata(self, csvFileName):
+        idlist = []
         #Loads the 100 track ids from csv file given as parameter. 
         trackIds = np.loadtxt(csvFileName,delimiter=", ", dtype=str)
-        print(trackIds[0])
+        for j in range(len(trackIds)):
+            idlist.append(trackIds[j][0])
+        all_features = self.spotifyacc.get_song_features(idlist)
+        print(all_features[0])
         
 
 

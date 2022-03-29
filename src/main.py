@@ -20,7 +20,6 @@ def main(argv):
     #For loop that generates the csv files. we could use QuackLocationType istead of numbers, but we want to skip unknown.
     for location in range(1, 8):
         #gets the search words
-        
         words = data_gen.get_searchWords(location)
         #gets the track frequency fo the words given
         locationtrackFrequency =data_gen.get_trackFrequency(words)
@@ -29,7 +28,6 @@ def main(argv):
 
     # for location2 in range(1,8):
     #     csvfilename = QuackLocationType(location2).name + "Tracks.csv"
-    #     print(csvfilename)
     #     data_gen.get_track_Metadata(csvfilename)
 
 if __name__ == "__main__":
