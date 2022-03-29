@@ -141,8 +141,9 @@ class Data_gen:
         for j in range(len(trackIds)):
             idlist.append(trackIds[j][0])
         all_Features = self.spotifyacc.get_song_features(idlist)
-        #Goes through all the features and aggregates them into seperate variables
+        
 
+        #initializes all the dict key values pairs. 
         totalAggregatedFeatures["danceability"] = 0
         totalAggregatedFeatures["energy"] = 0
         totalAggregatedFeatures["key"] = 0
@@ -153,7 +154,8 @@ class Data_gen:
         totalAggregatedFeatures["liveness"] = 0
         totalAggregatedFeatures["tempo"] = 0
 
-        #gets the sum of all the 
+        #Goes through all the features and aggregates them into seperate variables
+
         for num in range(len(trackIds)):
             current_Features = all_Features[num]
             totalAggregatedFeatures["danceability"] += current_Features["danceability"]
