@@ -27,7 +27,6 @@ def main(argv):
     
     #loops through the quack location types again and loads the previously generated csv files in order to generate location feature vectors
     for location2 in range(1, 8):
-        print(location2)
         #loads the csv file
         csvfilename = QuackLocationType(location2).name + "Tracks.csv"
         #calls get_track_metaData which returns a dict. It is easier to turn a list into a csv file, so the output is converted to a list.
