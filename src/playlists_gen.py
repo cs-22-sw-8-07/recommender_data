@@ -1,4 +1,5 @@
 from cgi import print_directory
+from itertools import count
 from msilib.schema import SelfReg
 from webbrowser import get
 from numpy import take, var
@@ -8,6 +9,7 @@ from configparser import ConfigParser
 from typing import Optional
 from spotify import Spotify
 import numpy as np
+import pandas as pd
 
 import collections
 
@@ -64,7 +66,7 @@ class Data_gen:
 
     def get_trackFrequency(self, searchWords):
         foundPlaylistsId = []
-        tracksFrequency = {}
+        tracksFrequency = pd.DataFrame()
         #Choose how many playlists are found and used. The number of playlist are searchIterations*50
         searchIterations = 1
         for word in searchWords:
@@ -114,10 +116,13 @@ class Data_gen:
                                 if trackId == None:
                                     break
                                 #if track was found before increment its value by one. if not then declare a new key value pair with the id. 
-                                if trackId in tracksFrequency:
-                                    tracksFrequency[trackId] += 1
-                                if trackId not in tracksFrequency:
-                                    tracksFrequency[trackId] = 1
+                                if itemTrack["track"] == False:
+                                    continue
+                                if trackId in tracksFrequency.index:
+                                    tracksFrequency.at[trackId,'frequency'] += 1
+                                if trackId not in tracksFrequency.index:
+                                    tempdf = pd.DataFrame({'frequency': 1,'popularity': itemTrack['popularity']}, index=[trackId],columns=['frequency', 'popularity'])
+                                    tracksFrequency = pd.concat([tracksFrequency,tempdf], axis= 0)
                 #if we have less the 50 playlists in the last search we 
                 if len(playlists) != 50:
                     print(word, "had", (i*50+len(playlists)), "playlists \n")
@@ -125,55 +130,58 @@ class Data_gen:
                 if i == (searchIterations-1) and len(playlists) == 50:
                     print(word, "had the full", (i*50 + 50), "playlists \n")
 
-        top100Frequencykeyvalue = collections.Counter(tracksFrequency).most_common(100)
-        #removes the value in the keyvalue pair and returns a list of track ids
-        #top100tracks = [i[0] for i in top100Frequencykeyvalue]
-        return top100Frequencykeyvalue
+        top100dataframe = tracksFrequency.nlargest(100, 'frequency')
+        #turns the list into a dataframe
+        #top100dataframe = pd.DataFrame(top100Frequencykeyvalue, columns=['id', 'frequency', 'popularity'])
+        
+        return top100dataframe
 
-
-    def get_track_metadata(self, csvFileName):
-        idlist = []
-        totalAggregatedFeatures = {}
-    
-
+    def load_csvfile(self, csvFileName):
         #Loads the 100 track ids from csv file given as parameter from the folder trackFrequencies. 
-        trackIds = np.loadtxt("trackFrequencies\\"+csvFileName,delimiter=", ", dtype=str)
-        for j in range(len(trackIds)):
-            idlist.append(trackIds[j][0])
-        all_Features = self.spotifyacc.get_song_features(idlist)
+        return pd.read_csv("trackFrequencies\\"+csvFileName, header=None)
+
+    def get_track_metadata(self,trackIds):
+        #gets the id of all the songs
+        idlist = list(trackIds.loc[:,0])
+            #returns the song features
+        return self.spotifyacc.get_song_features(idlist)
+
+    def gen_location_feature_vector(self, all_tracks_Features, csvFileName):
+        totalAggregatedFeatures = {}
 
         #the number we divide by in the end
-        songsWithData = len(trackIds)
-
+        songsWithData = len(all_tracks_Features)
         #initializes all the dict key values pairs. 
         totalAggregatedFeatures["danceability"] = 0
         totalAggregatedFeatures["energy"] = 0
-        totalAggregatedFeatures["key"] = 0
+        #totalAggregatedFeatures["key"] = 0
         totalAggregatedFeatures["loudness"] = 0
         totalAggregatedFeatures["speechiness"] = 0
         totalAggregatedFeatures["acousticness"] = 0
         totalAggregatedFeatures["instrumentalness"] = 0
         totalAggregatedFeatures["liveness"] = 0
         totalAggregatedFeatures["tempo"] = 0
-
+        totalAggregatedFeatures["valence"] =0
+        
         #Goes through all the features and aggregates them into seperate variables
-        for num in range(len(trackIds)):
-            current_Features = all_Features[num]
+        for num in range(len(all_tracks_Features)):
+            current_Features = all_tracks_Features[num]
 
             #Checks if the song actually have any metadata. If not we skip it and reduce the number we divide by 1
             if(current_Features == None):
                 songsWithData -= 1
                 continue
-            
+
             totalAggregatedFeatures["danceability"] += current_Features["danceability"]
             totalAggregatedFeatures["energy"] += current_Features["energy"]
-            totalAggregatedFeatures["key"] += current_Features["key"] #should probably not use. Music theory stuff. Ask Jonas if you want to know. 
+            #totalAggregatedFeatures["key"] += current_Features["key"] #should probably not use. Music theory stuff. Ask Jonas if you want to know. 
             totalAggregatedFeatures["loudness"] += current_Features["loudness"]
             totalAggregatedFeatures["speechiness"] += current_Features["speechiness"]
             totalAggregatedFeatures["acousticness"] += current_Features["acousticness"]
             totalAggregatedFeatures["instrumentalness"] += current_Features["instrumentalness"]
             totalAggregatedFeatures["liveness"] += current_Features["liveness"]
             totalAggregatedFeatures["tempo"] += current_Features["tempo"]
+            totalAggregatedFeatures["valence"] += current_Features["valence"]
         
         
         print("there were", songsWithData, "songs with eligeble data in", csvFileName)
@@ -182,6 +190,8 @@ class Data_gen:
             totalAggregatedFeatures[feature] = totalAggregatedFeatures[feature]/songsWithData
         return totalAggregatedFeatures
         
+    def get_individual_song_features(self, csvfilename, trackIds, all_tracks_features):
+        print("lol")
  
 
             
