@@ -65,12 +65,13 @@ class Data_gen:
     def get_trackFrequency(self, searchWords):
         foundPlaylistsId = []
         tracksFrequency = {}
-        searchiterations = 1
+        #Choose how many playlists are found and used. The number of playlist are searchIterations*50
+        searchIterations = 1
         for word in searchWords:
-            for i in range(searchiterations):
+            for i in range(searchIterations):
                 # print("\n")
                 # print(tracksFrequency)
-                #Gets playlists from spotify based on the searchwords, i is the offset.
+                #Gets playlists from spotify based on the searchwords, i is the offset. You can also add another parameter limit which sets the number of playlists found. Default is 50.
                 findPlaylistResponse = self.spotifyacc.find_playlists(word, i)
                 if findPlaylistResponse == None:
                     continue
@@ -86,8 +87,10 @@ class Data_gen:
                     playlistId = playlists[j]["id"]
                     if playlistId == None:
                         continue
+                    #Checks if the playlist already have been found before. If true we skip the playlist
                     if playlistId in foundPlaylistsId:
                         continue
+                    #Sets the playlist as found and gets all the songs in the playlist from spotify and saves it to result
                     if playlistId not in foundPlaylistsId:
                         foundPlaylistsId.append(playlistId)
                         result = self.spotifyacc.get_songs(playlistId)
@@ -96,6 +99,7 @@ class Data_gen:
                             continue
                         
                         for item in resultItems:
+                            #checks to make sure we don't end up with errors. 
                             if item == None:
                                 continue
                             itemTrack = item["track"]
@@ -109,6 +113,7 @@ class Data_gen:
                             for trackId in trackIdllist:
                                 if trackId == None:
                                     break
+                                #if track was found before increment its value by one. if not then declare a new key value pair with the id. 
                                 if trackId in tracksFrequency:
                                     tracksFrequency[trackId] += 1
                                 if trackId not in tracksFrequency:
@@ -117,7 +122,7 @@ class Data_gen:
                 if len(playlists) != 50:
                     print(word, "had", (i*50+len(playlists)), "playlists \n")
                     break
-                if i == (searchiterations-1) and len(playlists) == 50:
+                if i == (searchIterations-1) and len(playlists) == 50:
                     print(word, "had the full", (i*50 + 50), "playlists \n")
 
         top100Frequencykeyvalue = collections.Counter(tracksFrequency).most_common(100)
@@ -170,6 +175,8 @@ class Data_gen:
             totalAggregatedFeatures["liveness"] += current_Features["liveness"]
             totalAggregatedFeatures["tempo"] += current_Features["tempo"]
         
+        
+        print("there were", songsWithData, "songs with eligeble data in", csvFileName)
         #find the mean value for every feature. basically divides the sum by 100
         for feature in totalAggregatedFeatures:
             totalAggregatedFeatures[feature] = totalAggregatedFeatures[feature]/songsWithData
