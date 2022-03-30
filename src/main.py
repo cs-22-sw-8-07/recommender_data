@@ -17,13 +17,13 @@ def main(argv):
     token: str = argv[0]
     data_gen = Data_gen(token)
     #For loop that generates the csv files. we could use QuackLocationType istead of numbers, but we want to skip unknown.
-    # for location in range(1,8):
-    #     #gets the search words
-    #     words = data_gen.get_searchWords(location)
-    #     #gets the track frequency fo the words given
-    #     locationtrackFrequency =data_gen.get_trackFrequency(words)
-    #     #saves the returned list of 100 songs ids as a csv file in the folder trackFrequencies
-    #     np.savetxt("trackFrequencies\\"+QuackLocationType(location).name+"Tracks.csv", locationtrackFrequency, delimiter=", ", fmt ='% s')
+    for location in range(1,8):
+        #gets the search words
+        words = data_gen.get_searchWords(location)
+        #gets the track frequency fo the words given
+        locationtrackFrequency =data_gen.get_trackFrequency(words)
+        #saves the returned list of 100 songs ids as a csv file in the folder trackFrequencies
+        np.savetxt("trackFrequencies\\"+QuackLocationType(location).name+"Tracks.csv", locationtrackFrequency, delimiter=", ", fmt ='% s')
     
     #loops through the quack location types again and loads the previously generated csv files in order to generate location feature vectors
     for location2 in range(1, 8):
