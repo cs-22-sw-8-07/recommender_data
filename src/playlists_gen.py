@@ -129,13 +129,16 @@ class Data_gen:
     def get_track_metadata(self, csvFileName):
         idlist = []
         totalAggregatedFeatures = {}
+    
 
         #Loads the 100 track ids from csv file given as parameter from the folder trackFrequencies. 
         trackIds = np.loadtxt("trackFrequencies\\"+csvFileName,delimiter=", ", dtype=str)
         for j in range(len(trackIds)):
             idlist.append(trackIds[j][0])
         all_Features = self.spotifyacc.get_song_features(idlist)
-        
+
+        #the number we divide by in the end
+        songsWithData = len(trackIds)
 
         #initializes all the dict key values pairs. 
         totalAggregatedFeatures["danceability"] = 0
@@ -151,6 +154,12 @@ class Data_gen:
         #Goes through all the features and aggregates them into seperate variables
         for num in range(len(trackIds)):
             current_Features = all_Features[num]
+
+            #Checks if the song actually have any metadata. If not we skip it and reduce the number we divide by 1
+            if(current_Features == None):
+                songsWithData -= 1
+                continue
+            
             totalAggregatedFeatures["danceability"] += current_Features["danceability"]
             totalAggregatedFeatures["energy"] += current_Features["energy"]
             totalAggregatedFeatures["key"] += current_Features["key"] #should probably not use. Music theory stuff. Ask Jonas if you want to know. 
@@ -163,7 +172,7 @@ class Data_gen:
         
         #find the mean value for every feature. basically divides the sum by 100
         for feature in totalAggregatedFeatures:
-            totalAggregatedFeatures[feature] = totalAggregatedFeatures[feature]/len(trackIds)
+            totalAggregatedFeatures[feature] = totalAggregatedFeatures[feature]/songsWithData
         return totalAggregatedFeatures
         
  
