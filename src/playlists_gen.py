@@ -184,14 +184,29 @@ class Data_gen:
             totalAggregatedFeatures["valence"] += current_Features["valence"]
         
         
-        print("there were", songsWithData, "songs with eligeble data in", csvFileName)
+        #print("there were", songsWithData, "songs with eligeble data in", csvFileName)
         #find the mean value for every feature. basically divides the sum by 100
         for feature in totalAggregatedFeatures:
             totalAggregatedFeatures[feature] = totalAggregatedFeatures[feature]/songsWithData
         return totalAggregatedFeatures
         
-    def get_individual_song_features(self, csvfilename, trackIds, all_tracks_features):
-        print("lol")
+    def get_individual_song_features(self, csvfilename, trackIds, all_Tracks_Features, locationName):
+        individualTrackFeaturesDF = pd.DataFrame()
+        for index,items in trackIds.iterrows():
+            current_Features = all_Tracks_Features[index]
+            if current_Features == None:
+                continue
+
+            singleTrackFeatureTempDF = pd.DataFrame(
+                [(locationName, items[1], items[2], current_Features['duration_ms'], current_Features['danceability'], current_Features['energy'], current_Features['key'], current_Features['loudness'], current_Features['mode'], current_Features['speechiness'], current_Features['acousticness'], current_Features['instrumentalness'], current_Features['liveness'], current_Features['valence'], current_Features['tempo'] )],
+                columns=['location', 'frequency', 'popularity', 'duration_ms', 'danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness','acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo' ],index=[items[0]])
+            
+            individualTrackFeaturesDF = pd.concat([individualTrackFeaturesDF,singleTrackFeatureTempDF])
+        
+        return individualTrackFeaturesDF
+
+            
+        
  
 
             

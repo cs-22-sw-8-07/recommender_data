@@ -30,6 +30,7 @@ def main(argv):
     #     locationtrackFrequency.to_csv("trackFrequencies\\"+QuackLocationType(location).name+"Tracks.csv", sep=",", header=False)
     
     allVectorFeatureDataframe = pd.DataFrame()
+    completeIndividualTrackData = pd.DataFrame()
     #loops through the quack location types again and loads the previously generated csv files in order to generate location feature vectors
     for location2 in range(1, 8):
         #gets the name of the csv file based on the location
@@ -48,11 +49,12 @@ def main(argv):
 
         allVectorFeatureDataframe = pd.concat([allVectorFeatureDataframe, dflocationFeatureVector])
 
-        #data_gen.get_individual_song_features(csvfilename, trackIds, all_tracks_features)
+        locationTracksMetadata = data_gen.get_individual_song_features(csvfilename, trackIds, all_tracks_features, QuackLocationType(location2).name)
+        completeIndividualTrackData = pd.concat([completeIndividualTrackData,locationTracksMetadata])
 
     #writes the all the location feature vectors into a single csv file.
     allVectorFeatureDataframe.to_csv("featureVectors\\allLocationFeatureVector.csv", index=True,index_label='locations')
-
+    completeIndividualTrackData.to_csv("individualSongMetadata\\CompleteIndividualTrackData.csv",index=True,index_label='id')
 
 
         
