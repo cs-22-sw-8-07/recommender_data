@@ -6,11 +6,11 @@ def main(argv):
     token: str = argv[0]
 
     TaskMaster = Tasks(token)
-    #generates the track frequencies csv files
+    #generates the track frequencies csv files.
     TaskMaster.task1_trackFrequencies()
 
     #generates the completed feature vectors and the invidual song meta data csv files. 
-    #TaskMaster.task2_featureVectorsAndIndividualTracks()
+    TaskMaster.task2_featureVectorsAndIndividualTracks()
 
 
         
