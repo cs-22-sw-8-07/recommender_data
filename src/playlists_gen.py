@@ -8,7 +8,6 @@ import os
 from configparser import ConfigParser
 from typing import Optional
 from spotify import Spotify
-import numpy as np
 import pandas as pd
 
 import collections
@@ -37,7 +36,7 @@ class Data_gen:
         self.spotifyacc.connect_spotify(self.auth_token)
 
         
-
+    #gets the search words that are searched on in spotify. Can add more in order to search new things. 
     def get_searchWords(self, x):
         match x:
             #search words on spotify for each location type. very rough
@@ -63,7 +62,7 @@ class Data_gen:
                 #nigtLife
                 return ["bar", "club", "party", "night"]
 
-
+    #creates csv files for each location of top x number songs. until now it is 100 may change later. 
     def get_trackFrequency(self, searchWords):
         foundPlaylistsId = []
         tracksFrequency = pd.DataFrame()
@@ -71,8 +70,6 @@ class Data_gen:
         searchIterations = 1
         for word in searchWords:
             for i in range(searchIterations):
-                # print("\n")
-                # print(tracksFrequency)
                 #Gets playlists from spotify based on the searchwords, i is the offset. You can also add another parameter limit which sets the number of playlists found. Default is 50.
                 findPlaylistResponse = self.spotifyacc.find_playlists(word, i)
                 if findPlaylistResponse == None:
@@ -125,10 +122,10 @@ class Data_gen:
                                     tracksFrequency = pd.concat([tracksFrequency,tempdf], axis= 0)
                 #if we have less the 50 playlists in the last search we 
                 if len(playlists) != 50:
-                    print(word, "had", (i*50+len(playlists)), "playlists \n")
+                    print("\n",word, "had", (i*50+len(playlists)), "playlists")
                     break
                 if i == (searchIterations-1) and len(playlists) == 50:
-                    print(word, "had the full", (i*50 + 50), "playlists \n")
+                    print("\n",word, "had the full", (i*50 + 50), "playlists")
 
         top100dataframe = tracksFrequency.nlargest(100, 'frequency')
         #turns the list into a dataframe
@@ -136,16 +133,19 @@ class Data_gen:
         
         return top100dataframe
 
+    #loads the csvfile created from the data gathered in get_trackFrequency
     def load_csvfile(self, csvFileName):
         #Loads the 100 track ids from csv file given as parameter from the folder trackFrequencies. 
         return pd.read_csv("trackFrequencies\\"+csvFileName, header=None)
 
+    #gets metadata for each track loaded in the csvfile
     def get_track_metadata(self,trackIds):
         #gets the id of all the songs
         idlist = list(trackIds.loc[:,0])
             #returns the song features
         return self.spotifyacc.get_song_features(idlist)
 
+    #aggregates all the metadata collected into a single dict and gets the mean value for each value. 
     def gen_location_feature_vector(self, all_tracks_Features, csvFileName):
         totalAggregatedFeatures = {}
 
@@ -189,14 +189,16 @@ class Data_gen:
         for feature in totalAggregatedFeatures:
             totalAggregatedFeatures[feature] = totalAggregatedFeatures[feature]/songsWithData
         return totalAggregatedFeatures
-        
+    
+    #aggregates all the metadata for each invidiual song into a pandas dataframe for each song for each location. 
     def get_individual_song_features(self, csvfilename, trackIds, all_Tracks_Features, locationName):
         individualTrackFeaturesDF = pd.DataFrame()
+        #iterates over all songs in trackIds, which have all the top songs defined in the trackFrequencies csvfile. 
         for index,items in trackIds.iterrows():
             current_Features = all_Tracks_Features[index]
             if current_Features == None:
                 continue
-
+            
             singleTrackFeatureTempDF = pd.DataFrame(
                 [(locationName, items[1], items[2], current_Features['duration_ms'], current_Features['danceability'], current_Features['energy'], current_Features['key'], current_Features['loudness'], current_Features['mode'], current_Features['speechiness'], current_Features['acousticness'], current_Features['instrumentalness'], current_Features['liveness'], current_Features['valence'], current_Features['tempo'] )],
                 columns=['location', 'frequency', 'popularity', 'duration_ms', 'danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness','acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo' ],index=[items[0]])
