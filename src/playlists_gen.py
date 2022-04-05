@@ -63,7 +63,7 @@ class Data_gen:
                 return ["bar", "club", "party", "night"]
 
     #creates csv files for each location of top x number songs. until now it is 100 may change later. 
-    def get_trackFrequency(self, searchWords):
+    def get_trackFrequency(self, searchWords, n=100):
         foundPlaylistsId = []
         tracksFrequency = pd.DataFrame()
         #Choose how many playlists are found and used. The number of playlist are searchIterations*50
@@ -127,7 +127,7 @@ class Data_gen:
                 if i == (searchIterations-1) and len(playlists) == 50:
                     print("\n",word, "had the full", (i*50 + 50), "playlists")
 
-        top100dataframe = tracksFrequency.nlargest(100, 'frequency')
+        top100dataframe = tracksFrequency.nlargest(n, 'frequency')
         #turns the list into a dataframe
         #top100dataframe = pd.DataFrame(top100Frequencykeyvalue, columns=['id', 'frequency', 'popularity'])
         

@@ -15,12 +15,14 @@ class Tasks:
         self.data_gen = Data_gen(token)
         
     def task1_trackFrequencies(self):
+        #this is the number of songs saved to the csv file. 
+        numberTopSongs = 100
         #For loop that generates the csv files. we could use QuackLocationType istead of numbers, but we want to skip unknown.
         for location in range(1,8):
             #gets the search words
             words = self.data_gen.get_searchWords(location)
             #gets the track frequency fo the words given
-            locationtrackFrequency =self.data_gen.get_trackFrequency(words)
+            locationtrackFrequency =self.data_gen.get_trackFrequency(words, numberTopSongs)
             #saves the returned list of 100 songs ids as a csv file in the folder trackFrequencies
             locationtrackFrequency.to_csv("trackFrequencies\\"+quackLocationType.QuackLocationType(location).name+"Tracks.csv", sep=",", header=False)
     
