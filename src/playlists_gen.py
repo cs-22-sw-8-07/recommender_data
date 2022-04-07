@@ -200,8 +200,8 @@ class Data_gen:
                 continue
             
             singleTrackFeatureTempDF = pd.DataFrame(
-                [(locationName, items[1], items[2], current_Features['duration_ms'], current_Features['danceability'], current_Features['energy'], current_Features['key'], current_Features['loudness'], current_Features['mode'], current_Features['speechiness'], current_Features['acousticness'], current_Features['instrumentalness'], current_Features['liveness'], current_Features['valence'], current_Features['tempo'] )],
-                columns=['location', 'frequency', 'popularity', 'duration_ms', 'danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness','acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo' ],index=[items[0]])
+                [(locationName, items[1], items[2], current_Features['duration_ms'], current_Features['danceability'], current_Features['energy'], current_Features['key'], current_Features['loudness'], current_Features['mode'], current_Features['speechiness'], current_Features['acousticness'], current_Features['instrumentalness'], current_Features['liveness'], current_Features['valence'], current_Features['tempo'], current_Features['time_signature'] )],
+                columns=['location', 'frequency', 'popularity', 'duration_ms', 'danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness','acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo', 'time_signature' ],index=[items[0]])
             
             individualTrackFeaturesDF = pd.concat([individualTrackFeaturesDF,singleTrackFeatureTempDF])
         
