@@ -18,9 +18,9 @@ class Spotify:
             # Authorize via spotify and save the auth token in _sp
             self._sp = spotipy.Spotify(auth=auth_token)
 
-    def find_playlists(self, location: str, offset = 0):
+    def find_playlists(self, location: str, offset = 0, limit = 50):
         # Search for the term "location" and return the first playlist
-        result = self._sp.search(location, type="playlist", limit=50, offset= offset)
+        result = self._sp.search(location, type="playlist", limit=limit, offset= offset)
         # Find the ID of the playlist (nested dict)
         return result
 
@@ -28,3 +28,6 @@ class Spotify:
         # Retrieve tracks from the given playlist, only return the track id
         return self._sp.playlist_items(playlist_id)
         
+    def get_song_features(self, song_ids: str):
+        #retrive meta data on tracks given a specific track id. Returns a list of meta data values
+        return self._sp.audio_features(song_ids)
