@@ -7,6 +7,7 @@ from asyncio import tasks
 from operator import index
 import numpy as np
 import quackLocationType
+import os
 
 class Tasks:
     data_gen: object
@@ -18,19 +19,25 @@ class Tasks:
         #this is the number of songs saved to the csv file. 
         numberTopSongs = 100
         #For loop that generates the csv files. we could use QuackLocationType istead of numbers, but we want to skip unknown.
-        for location in range(1,8):
+        for location in range(len(quackLocationType.QuackLocationType)):
+            #checks if the location type is type unknown and skips if so. 
+            if(quackLocationType.QuackLocationType(location).name == "unknown"):
+                continue
             #gets the search words
             words = self.data_gen.get_searchWords(location)
             #gets the track frequency fo the words given
             locationtrackFrequency =self.data_gen.get_trackFrequency(words, numberTopSongs)
             #saves the returned list of 100 songs ids as a csv file in the folder trackFrequencies
-            locationtrackFrequency.to_csv("trackFrequencies\\"+quackLocationType.QuackLocationType(location).name+"Tracks.csv", sep=",", header=False)
+            locationtrackFrequency.to_csv(os.path.join("trackFrequencies", quackLocationType.QuackLocationType(location).name + "Tracks.csv"), sep=",", header=False)
     
     def task2_featureVectorsAndIndividualTracks(self):
         allVectorFeatureDataframe = pd.DataFrame()
         completeIndividualTrackData = pd.DataFrame()
         #loops through the quack location types again and loads the previously generated csv files in order to generate location feature vectors
-        for location in range(1, 8):
+        for location in range(len(quackLocationType.QuackLocationType)):
+            #checks if the location type is type unknown and skips if so. 
+            if(quackLocationType.QuackLocationType(location).name == "unknown"):
+                continue
             #gets the name of the csv file based on the location
             csvfilename = quackLocationType.QuackLocationType(location).name + "Tracks.csv"
 
@@ -54,6 +61,6 @@ class Tasks:
             completeIndividualTrackData = pd.concat([completeIndividualTrackData,locationTracksMetadata])
 
         #writes the all the location feature vectors into a single csv file.
-        allVectorFeatureDataframe.to_csv("featureVectors\\allLocationFeatureVector.csv", index=True,index_label='locations')
+        allVectorFeatureDataframe.to_csv(os.path.join("featureVectors", "allLocationFeatureVector.csv"), index=True,index_label='locations')
         #write all the individual track metadata into a csv file.
-        completeIndividualTrackData.to_csv("individualSongMetadata\\CompleteIndividualTrackData.csv",index=True,index_label='id')
+        completeIndividualTrackData.to_csv(os.path.join("individualSongMetadata","CompleteIndividualTrackData.csv"),index=True,index_label='id')
