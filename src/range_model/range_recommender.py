@@ -22,6 +22,7 @@ class RangeRecommender:
             tracks = self._range_model.get_tracks(location)
             for track in tracks:
                 artist_list = []
+                # TODO ['artist 1','artist 2']
                 for artist in track.artists:
                     artist_list.append(artist)
                 artists = ", ".join(artist_list)
