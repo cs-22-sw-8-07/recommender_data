@@ -37,7 +37,7 @@ class RangeRecommender(Recommender):
             dataframe.to_csv(
                 os.path.join("range_recommender_tracks", quack_location_type.QuackLocationType(location).name +
                              "_tracks.csv"),
-                sep=" ", header=False, index=False)
+                sep=",", header=False, index=False)
         except:
             return service_response_error_json(error_no.value)
 
