@@ -18,6 +18,7 @@ class RangeRecommender:
 
         try:
             error_no = Errors.CouldNotFindTracksFromRangeRecommender
+            # TODO: tracks missing album cover info
             tracks = self._range_model.get_tracks(location)
             for track in tracks:
                 artist_list = []

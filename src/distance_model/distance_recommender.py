@@ -21,6 +21,7 @@ class DistanceRecommender:
 
         try:
             error_no = Errors.CouldNotFindClosestTracks
+            # TODO: tracks missing album cover info
             tracks = self._vsm.closest_tracks(self._feature_vec[key])
 
             for track in tracks:

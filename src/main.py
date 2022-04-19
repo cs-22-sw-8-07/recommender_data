@@ -23,7 +23,7 @@ def main(argv):
 
     try:
         error_no = Errors.Argument3NotGiven
-        match argv[2]:
+        match argv[1]:
             case "dataset":
                 token: str = argv[0]
 
@@ -36,12 +36,6 @@ def main(argv):
             case "distance":
                 error_no = Errors.NoConfigFile
                 config = load_config("config.cnf")
-
-                error_no = Errors.QuackLocationTypeArgumentNotANumber
-                loc = int(argv[1])
-
-                error_no = Errors.QuackLocationTypeNotWithinRange
-                location = QuackLocationType(loc)
 
                 error_no = Errors.CouldNotInitializeVectorSpace
                 feature_vec = FeatureVector()
@@ -65,12 +59,6 @@ def main(argv):
             case "range":
                 error_no = Errors.NoConfigFile
                 config = load_config("config.cnf")
-
-                error_no = Errors.QuackLocationTypeArgumentNotANumber
-                loc = int(argv[1])
-
-                error_no = Errors.QuackLocationTypeNotWithinRange
-                location = QuackLocationType(loc)
 
                 error_no = Errors.CouldNotLoadTrackData
                 track_data = TrackData()
