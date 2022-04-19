@@ -16,13 +16,22 @@ class RangeRecommender(Recommender):
 
     def get_playlist(self, location: QuackLocationType):
         error_no = 0
-        result = []
+        result = {"id": [], "name": [], "artist": []}
+        pd.DataFrame(result)
 
         try:
             error_no = Errors.CouldNotFindTracksFromRangeRecommender
             tracks = self._range_model.get_tracks(location)
             for track in tracks:
-                result.append(track.id)
+                artist_list = []
+                for artist in track.artists:
+                    artist_list.append(artist)
+                artists = ", ".join(artist_list)
+
+                dataframe = {"id": track.id, "name": track.name, "artist": artists}
+
+                result = result.append(dataframe)
+
 
             error_no = Errors.CouldNotCreateCSVFile
             pd.DataFrame(result).to_csv(
