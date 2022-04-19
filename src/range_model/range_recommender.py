@@ -4,14 +4,12 @@ import pandas as pd
 
 import quack_location_type
 from quack_location_type import QuackLocationType
-from recommender import Recommender
 from service_response import Errors, service_response_error_json
 from range_model.range_model import RangeModel
 
 
-class RangeRecommender(Recommender):
+class RangeRecommender:
     def __init__(self, range_model: RangeModel):
-        super().__init__()
         self._range_model = range_model
 
     def get_playlist(self, location: QuackLocationType):

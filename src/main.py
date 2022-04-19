@@ -17,7 +17,6 @@ from distance_model.distance_recommender import DistanceRecommender
 from range_model.range_recommender import RangeRecommender
 
 
-
 def main(argv):
     error_no = 0
     base_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
@@ -38,16 +37,15 @@ def main(argv):
                 error_no = Errors.NoConfigFile
                 config = load_config("config.cnf")
 
-                #error_no = Errors.QuackLocationTypeArgumentNotANumber
-                #loc = int(argv[1])
+                error_no = Errors.QuackLocationTypeArgumentNotANumber
+                loc = int(argv[1])
 
-                #error_no = Errors.QuackLocationTypeNotWithinRange
-                #location = QuackLocationType(loc)
-
+                error_no = Errors.QuackLocationTypeNotWithinRange
+                location = QuackLocationType(loc)
 
                 error_no = Errors.CouldNotInitializeVectorSpace
                 feature_vec = FeatureVector()
-                path = os.path.join(base_folder, "resources", "allLocationFeatureVector.csv")
+                path = os.path.join(base_folder, "featureVectors", "allLocationFeatureVector.csv")
                 feature_vec.load_feature_vectors(path)
 
                 error_no = Errors.CouldNotInitializeVectorSpaceModel
