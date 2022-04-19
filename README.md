@@ -20,4 +20,4 @@ In order to run you need 2 arguments.
 The output of each model can be found in:
 - "dataset": trackFrequency and featureVector
 - "range": range_recommender_tracks
-- "distance" distance_recommender_tracks
+- "distance": distance_recommender_tracks
