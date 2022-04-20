@@ -20,7 +20,6 @@ class RangeRecommender:
 
         try:
             error_no = Errors.CouldNotFindTracksFromRangeRecommender
-            # TODO: tracks missing album cover info
             tracks = self._range_model.get_tracks(location)
             for track in tracks:
                 artist_list = []
@@ -35,8 +34,9 @@ class RangeRecommender:
                 result["image"].append(image)
 
             dataframe = pd.DataFrame.from_dict(result)
-
+            print(dataframe)
             error_no = Errors.CouldNotCreateCSVFile
+            # TODO: The dataframe does not save to a CSV correctly
             dataframe.to_csv(
                 os.path.join("range_recommender_tracks", quack_location_type.QuackLocationType(location).name +
                              "_tracks.csv"),

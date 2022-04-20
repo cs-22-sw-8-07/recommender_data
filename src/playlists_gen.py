@@ -216,5 +216,4 @@ class Data_gen:
     def get_track_image(self, track_id):
         track_info = self.spotifyacc.tracks(track_id)
         # returns the smallest song image
-        print(track_info['album']['images'][-1]['url'])
         return track_info['album']['images'][-1]['url']

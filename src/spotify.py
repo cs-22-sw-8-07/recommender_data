@@ -34,4 +34,4 @@ class Spotify:
 
     def tracks(self, id: str):
         #retrive meta data on tracks given a specific track id. Returns a list of meta data values
-        return self._sp.tracks(id)
+        return self._sp.track(id)
