@@ -29,7 +29,6 @@ def _load_config() -> Optional[ConfigParser]:
 
 class Data_gen:
     auth_token: str
-    spotifyacc: object
 
     def __init__(self, token):
         self.auth_token = token
