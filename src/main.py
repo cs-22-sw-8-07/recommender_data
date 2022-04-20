@@ -20,12 +20,12 @@ from range_model.range_recommender import RangeRecommender
 def main(argv):
     error_no = 0
     base_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+    token: str = argv[0]
 
     try:
         error_no = Errors.Argument3NotGiven
         match argv[1]:
             case "dataset":
-                token: str = argv[0]
 
                 TaskMaster = Tasks(token)
                 # generates the track frequencies csv files.
@@ -80,10 +80,10 @@ def main(argv):
                     # checks if the location type is type unknown and skips if so.
                     if quack_location_type.QuackLocationType(location).name == "unknown":
                         continue
-                    rec.get_playlist(QuackLocationType(location))
+                    rec.get_playlist(QuackLocationType(location), token)
             case _:
-                error_no = Errors.Argument3NotARecommender
-                raise Exception("Argument3NotARecommender")
+                error_no = Errors.Argument2NotARecommender
+                raise Exception("Argument2NotARecommender")
     except:
         print(service_response_error_json(error_no.value))
         sys.exit()

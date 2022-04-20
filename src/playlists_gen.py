@@ -14,7 +14,7 @@ import collections
 
 
 def _load_config() -> Optional[ConfigParser]:
-    base_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+    base_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
     config_file = os.path.join(base_folder, "config.cnf")
 
     if not os.path.exists(config_file) or not os.path.isfile(config_file):
@@ -213,3 +213,9 @@ class Data_gen:
             individualTrackFeaturesDF = pd.concat([individualTrackFeaturesDF, singleTrackFeatureTempDF])
 
         return individualTrackFeaturesDF
+
+    def get_track_image(self, track_id):
+        track_info = self.spotifyacc.tracks(track_id)
+        # returns the smallest song image
+        print(track_info['album']['images'][-1]['url'])
+        return track_info['album']['images'][-1]['url']
