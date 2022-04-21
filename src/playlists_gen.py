@@ -63,7 +63,7 @@ class Data_gen:
                 return ["bar", "club", "party", "night"]
 
     #creates csv files for each location of top x number songs. until now it is 100 may change later. 
-    def get_trackFrequency(self, searchWords, n=100):
+    def get_trackFrequency(self, searchWords, n):
         foundPlaylistsId = []
         tracksFrequency = pd.DataFrame()
         #Choose how many playlists are found and used. The number of playlist are searchIterations*50
@@ -143,7 +143,13 @@ class Data_gen:
         #gets the id of all the songs
         idlist = list(trackIds.loc[:,0])
             #returns the song features
-        return self.spotifyacc.get_song_features(idlist)
+        if len(idlist) == 100: 
+            return self.spotifyacc.get_song_features(idlist)
+        all_tracks_features = []
+        for i in range(len(idlist)//100):
+            tracks_features = self.spotifyacc.get_song_features(idlist[i*100:(i+1)*100])
+            all_tracks_features = all_tracks_features + tracks_features
+        return all_tracks_features
 
     #aggregates all the metadata collected into a single dict and gets the mean value for each value. 
     def gen_location_feature_vector(self, all_tracks_Features, csvFileName):
@@ -171,7 +177,7 @@ class Data_gen:
             if(current_Features == None):
                 songsWithData -= 1
                 continue
-
+            print(type(all_tracks_Features[num]))
             totalAggregatedFeatures["danceability"] += current_Features["danceability"]
             totalAggregatedFeatures["energy"] += current_Features["energy"]
             #totalAggregatedFeatures["key"] += current_Features["key"] #should probably not use. Music theory stuff. Ask Jonas if you want to know. 

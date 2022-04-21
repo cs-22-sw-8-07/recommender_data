@@ -17,7 +17,7 @@ class Tasks:
         
     def task1_trackFrequencies(self):
         #this is the number of songs saved to the csv file. 
-        numberTopSongs = 100
+        numberTopSongs = 200
         #For loop that generates the csv files. we could use QuackLocationType istead of numbers, but we want to skip unknown.
         for location in range(len(quackLocationType.QuackLocationType)):
             #checks if the location type is type unknown and skips if so. 
@@ -45,8 +45,7 @@ class Tasks:
             trackIds = self.data_gen.load_csvfile(csvfilename)
             #calls get_track_metaData which get the meta data on the top 100 tracks and returns it.
             all_tracks_features = self.data_gen.get_track_metadata(trackIds)
-            #print(all_tracks_features, "\n")
-
+            
             #calls gen_location_feature_vector which returns a dict of a location feature vector. It is easier to turn a list into a csv file, so the output is converted to a list.
             locationFeatureVector = self.data_gen.gen_location_feature_vector(all_tracks_features, csvfilename)
             #turns locationFeatureVector into a dataframe in order to more easily turn it into a csv. 
