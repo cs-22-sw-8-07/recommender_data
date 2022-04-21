@@ -45,19 +45,19 @@ class Data_gen:
                 return ["church", "christ", "god", "jesus"]
             case 2:
                 #education
-                return ["university", "study", "class"]
+                return ["university", "study", "class", "school", "education"]
             case 3:
                 #cemetery
-                return ["crypt", "tomb NOT tomboy", "grave", "cemetery"]
+                return ["crypt", "grave", "cemetery", "halloween"]
             case 4:
                 #forest
                 return ["forest", "woods", "wildlife", "nature"]
             case 5:
                 #beach
-                return ["beach", "sun", "summer", "heat"]
+                return ["beach", "sun", "summer", "seaside"]
             case 6:
                 #urban
-                return ["ghetto", "street", "urban"]
+                return ["street", "urban", "city", "metropolis", "downtown"]
             case 7:
                 #nigtLife
                 return ["bar", "club", "party", "night"]
@@ -177,7 +177,7 @@ class Data_gen:
             if(current_Features == None):
                 songsWithData -= 1
                 continue
-            print(type(all_tracks_Features[num]))
+            
             totalAggregatedFeatures["danceability"] += current_Features["danceability"]
             totalAggregatedFeatures["energy"] += current_Features["energy"]
             #totalAggregatedFeatures["key"] += current_Features["key"] #should probably not use. Music theory stuff. Ask Jonas if you want to know. 
