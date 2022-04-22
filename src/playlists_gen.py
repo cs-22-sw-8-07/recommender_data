@@ -136,15 +136,21 @@ class Data_gen:
 
     # loads the csvfile created from the data gathered in get_trackFrequency
     def load_csvfile(self, csvFileName):
-        # Loads the 100 track ids from csv file given as parameter from the folder trackFrequencies.
-        return pd.read_csv("trackFrequencies\\" + csvFileName, header=None)
+        #Loads the 100 track ids from csv file given as parameter from the folder trackFrequencies.
+        return pd.read_csv("trackFrequencies\\"+csvFileName, header=None)
 
-    # gets metadata for each track loaded in the csvfile
-    def get_track_metadata(self, trackIds):
-        # gets the id of all the songs
-        idlist = list(trackIds.loc[:, 0])
-        # returns the song features
-        return self.spotifyacc.get_song_features(idlist)
+    #gets metadata for each track loaded in the csvfile
+    def get_track_metadata(self,trackIds):
+        #gets the id of all the songs
+        idlist = list(trackIds.loc[:,0])
+            #returns the song features
+        if len(idlist) == 100:
+            return self.spotifyacc.get_song_features(idlist)
+        all_tracks_features = []
+        for i in range(len(idlist)//100):
+            tracks_features = self.spotifyacc.get_song_features(idlist[i*100:(i+1)*100])
+            all_tracks_features = all_tracks_features + tracks_features
+        return all_tracks_features
 
     # aggregates all the metadata collected into a single dict and gets the mean value for each value.
     def gen_location_feature_vector(self, all_tracks_Features, csvFileName):
