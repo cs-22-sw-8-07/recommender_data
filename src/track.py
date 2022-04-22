@@ -36,13 +36,13 @@ class Track:
     popularity: float
     duration_ms: int
     explicit: bool
-    artists: []
-    id_artists: []
+    artists =  []
+    id_artists = []
     release_date: str
     key: float
     mode: int
     time_signature: int
-    attribute_vec: []
+    attribute_vec = []
 
     def normalize_vec(self, min_vec, max_vec):
         for i in range(0, len(self.attribute_vec)):

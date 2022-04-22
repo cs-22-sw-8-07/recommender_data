@@ -1,12 +1,17 @@
+from cgi import test
 from lib2to3.pgen2 import token
-import quack_location_type
+from quack_location_type import QuackLocationType
 from playlists_gen import Data_gen
-import pandas as pd
 from asyncio import tasks
 from operator import index
-import numpy as np
 import quack_location_type
 import os
+from ml_location_deter.ML_quackLocation import AddLocationtoKaggle
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import numpy as np
 
 
 class Tasks:
@@ -19,9 +24,9 @@ class Tasks:
         #this is the number of songs saved to the csv file.
         numberTopSongs = 200
         #For loop that generates the csv files. we could use QuackLocationType istead of numbers, but we want to skip unknown.
-        for location in range(len(quackLocationType.QuackLocationType)):
+        for location in range(len(QuackLocationType)):
             #checks if the location type is type unknown and skips if so.
-            if(quackLocationType.QuackLocationType(location).name == "unknown"):
+            if(QuackLocationType(location).name == "unknown"):
                 continue
             # gets the search words
             words = self.data_gen.get_searchWords(location)
@@ -71,3 +76,33 @@ class Tasks:
         # write all the individual track metadata into a csv file.
         completeIndividualTrackData.to_csv(os.path.join("individualSongMetadata", "CompleteIndividualTrackData.csv"),
                                            index=True, index_label='id')
+    
+    def task3_ML_on_kaggle(self):
+        ml = AddLocationtoKaggle
+        pathTrain = "../recommender_data/individualSongMetadata/CompleteIndividualTrackData200.csv"
+        pathPred = "../recommender_data/individualSongMetadata/tracks.csv"
+        fullcsv = ml.loadCSVfileML(pathTrain)
+        target = pd.get_dummies(fullcsv['location'])
+        
+        trainData = ml.ML_preprocessing(fullcsv)
+
+        x_train, x_test, y_train, y_test = train_test_split(trainData, target, test_size=0.1)
+
+
+        model = ml.trainModel(x_train, y_train, x_test, y_test)
+        #ml.showConfusionMatrix(model,x_test,y_test)
+
+        kaggle_dataset = pd.read_csv(pathPred, usecols=["id", "name","artists","danceability","energy","key","loudness","mode","speechiness","acousticness","instrumentalness","liveness","valence","tempo","time_signature"])
+
+        print(kaggle_dataset, "\n \n")
+
+        kaggle_predset = ml.ML_preprocessing(kaggle_dataset)
+
+        print(kaggle_predset, "\n \n")
+
+        testing = model.predict(kaggle_predset)
+
+        print(testing, "\n \n")
+        print(len(testing))
+
+        

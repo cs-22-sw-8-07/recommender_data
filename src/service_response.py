@@ -17,8 +17,8 @@ class Errors(Enum):
     CouldNotInitializeRangeModel = 118
     CouldNotLoadDataSet = 119
     CouldNotInitializeVectorSpaceModel = 120
-    Argument3NotGiven = 121
-    Argument3NotARecommender = 122
+    Argument2NotGiven = 121
+    Argument2NotARecommender = 122
     CouldNotLoadTrackData = 123
     CouldNotCreateCSVFile = 124
 
