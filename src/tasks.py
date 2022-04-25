@@ -1,5 +1,6 @@
-from cgi import test
-from lib2to3.pgen2 import token
+from multiprocessing.connection import wait
+from time import time
+from unicodedata import name
 from quack_location_type import QuackLocationType
 from playlists_gen import Data_gen
 from asyncio import tasks
@@ -12,6 +13,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import numpy as np
+from time import sleep
 
 
 class Tasks:
@@ -84,6 +86,7 @@ class Tasks:
         fullcsv = ml.loadCSVfileML(pathTrain)
         target = pd.get_dummies(fullcsv['location'])
         
+        #creates the training data and preproccesses  loudness and tempo with normalization. 
         trainData = ml.ML_preprocessing(fullcsv)
 
         x_train, x_test, y_train, y_test = train_test_split(trainData, target, test_size=0.1)
@@ -94,15 +97,60 @@ class Tasks:
 
         kaggle_dataset = pd.read_csv(pathPred, usecols=["id", "name","artists","danceability","energy","key","loudness","mode","speechiness","acousticness","instrumentalness","liveness","valence","tempo","time_signature"])
 
-        print(kaggle_dataset, "\n \n")
-
+        #preprocesses the kaggle dataset
         kaggle_predset = ml.ML_preprocessing(kaggle_dataset)
+        #predicts on the kaggle dataset
+        predicted_values = model.predict(kaggle_predset)
+        predicted_values =predicted_values.tolist()
+        location_value = [0] * len(predicted_values)
+        location_enum = [0] * len(predicted_values)
+        #takes the id name and artists from the kaggledataset. the predicted kaagleset is the data that is later turned into csv files. 
+        predicted_kaggleset = kaggle_dataset[["id", "name","artists"]]
+        
+        #goes through every predicted set of values and finds the highest percentage location value. This percentage is then saved for ordering later and we use the quacklocationtype enum to get the actual location. The +1 is used to skip the unknown category. 
+        for listnum in range(len(predicted_values)):
+            location_value[listnum] = max(predicted_values[listnum])
+            location_enum[listnum] = quack_location_type.QuackLocationType(predicted_values[listnum].index(max(predicted_values[listnum]))+1).name
 
-        print(kaggle_predset, "\n \n")
+            
 
-        testing = model.predict(kaggle_predset)
+        #adds location and the percantage location value to our dataset. 
+        predicted_kaggleset.loc[:,"location"] = location_enum
+        predicted_kaggleset.loc[:,"location_value"] = location_value
+        #sorts the dataframe based on the location value.
+        predicted_kaggleset = predicted_kaggleset.sort_values('location_value', ascending=False)
+        
+        for locationint in range(len(quack_location_type.QuackLocationType)):
+            image_list = [] * 1000
+            #if unknown continue. 
+            if locationint == 0:
+                continue
+            #splits the dataset into 7 based their respective locations and only takes highest 1000 location values
+            predicted_location_tracks =predicted_kaggleset.loc[predicted_kaggleset['location'] == quack_location_type.QuackLocationType(locationint).name].head(1000)
+            #drops location and location value as these are not needed anymore and are not part of the final csv.
+            predicted_location_tracks = predicted_location_tracks.drop(columns=['location', 'location_value'])
+            artist_string_list = []
+            for id in predicted_location_tracks['id']:
+                #gets the image for every id in the dataframe
+                image_list.append(self.data_gen.get_track_image(id))
 
-        print(testing, "\n \n")
-        print(len(testing))
+                #turns the artist field into the correct form.
+                artists_series = predicted_location_tracks.loc[predicted_location_tracks['id'] == id, 'artists']
+                artist_list = artists_series.iloc[0].split(",")
+                artists = ";".join(artist_list)
+                artists = artists.replace("[","")
+                artists = artists.replace("]","")
+                artists = artists.replace("'","")
+                artist_string_list.append(artists)
+                #predicted_kaggleset.loc[predicted_kaggleset['id'] == id, 'artists'] = artists
+            predicted_location_tracks['artists']= artist_string_list
 
+            #appends the images to the dataframe. 
+            predicted_location_tracks.loc[:,'image'] = image_list
+            predicted_location_tracks.to_csv(
+                os.path.join("machinelearn_recommender_tracks", quack_location_type.QuackLocationType(locationint).name + "_tracks.csv"),
+                sep=",", header=False)
+            print(quack_location_type.QuackLocationType(locationint).name + " pictures fetched \n")
+            sleep(10)
+            #print(predicted_kaggleset.loc[predicted_kaggleset['location'] == 'night_life'])
         

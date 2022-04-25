@@ -29,7 +29,7 @@ class AddLocationtoKaggle:
         adam  = tf.keras.optimizers.Adam(learning_rate=1e-3)
         model.compile(optimizer=adam, loss=keras.losses.CategoricalCrossentropy(), metrics = ['accuracy'])
 
-        history = model.fit(x_train, y_train, epochs=600, validation_data = (x_test, y_test))
+        history = model.fit(x_train, y_train, epochs=50, validation_data = (x_test, y_test))
         
         
         return model
