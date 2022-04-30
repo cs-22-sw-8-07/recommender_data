@@ -2,4 +2,4 @@ __pycache__
 bin
 .idea
 *.cnf
-C:/Users/jonas/Documents/GitHub/recommender_data/ml_models/
+ml_models/
