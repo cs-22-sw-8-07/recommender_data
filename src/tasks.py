@@ -14,7 +14,7 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 from time import sleep
-
+from sklearn.model_selection import KFold, StratifiedKFold
 
 class Tasks:
     data_gen: object
@@ -81,21 +81,33 @@ class Tasks:
     
     def task3_ML_on_kaggle(self):
         ml = AddLocationtoKaggle
+        num_folds = 10
+        
         pathTrain = "../recommender_data/individualSongMetadata/CompleteIndividualTrackData200.csv"
-        pathPred = "../recommender_data/individualSongMetadata/tracks.csv"
+        pathPred = "../recommender_data/individualSongMetadata/skimmed_tracks.csv"
         fullcsv = ml.loadCSVfileML(pathTrain)
         target = pd.get_dummies(fullcsv['location'])
         
         #creates the training data and preproccesses  loudness and tempo with normalization. 
         trainData = ml.ML_preprocessing(fullcsv)
 
-        x_train, x_test, y_train, y_test = train_test_split(trainData, target, test_size=0.1)
+        
+
+        #x_train, x_test, y_train, y_test = train_test_split(trainData, target, test_size=0.1)
 
 
-        model = ml.trainModel(x_train, y_train, x_test, y_test)
+        #model = ml.trainModelSingle(x_train, y_train, x_test, y_test)
+        model = ml.trainModelKFold(trainData, target)
         #ml.showConfusionMatrix(model,x_test,y_test)
 
         kaggle_dataset = pd.read_csv(pathPred, usecols=["id", "name","artists","danceability","energy","key","loudness","mode","speechiness","acousticness","instrumentalness","liveness","valence","tempo","time_signature"])
+
+        #removes garbage from kaggledataset and creates file skimmed_tracks.csv
+        kaggle_dataset = ml.skim_kaggle_dataset(kaggle_dataset)
+        kaggle_dataset.to_csv(
+                os.path.join("individualSongMetadata", "skimmed_tracks.csv"),
+                sep=",", header=True, index=False)
+
 
         #preprocesses the kaggle dataset
         kaggle_predset = ml.ML_preprocessing(kaggle_dataset)
@@ -149,7 +161,7 @@ class Tasks:
             predicted_location_tracks.loc[:,'image'] = image_list
             predicted_location_tracks.to_csv(
                 os.path.join("machinelearn_recommender_tracks", quack_location_type.QuackLocationType(locationint).name + "_tracks.csv"),
-                sep=",", header=False)
+                sep=",", header=False, index=False)
             print(quack_location_type.QuackLocationType(locationint).name + " pictures fetched \n")
             sleep(10)
             #print(predicted_kaggleset.loc[predicted_kaggleset['location'] == 'night_life'])
