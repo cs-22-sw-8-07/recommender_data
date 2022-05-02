@@ -129,5 +129,3 @@ class AddLocationtoKaggle:
         kaggle_dataset = kaggle_dataset[kaggle_dataset.acousticness < 0.9]
         return kaggle_dataset
 
-        #kaggle_dataset = kaggle_dataset.drop(kaggle_dataset[].index)
-

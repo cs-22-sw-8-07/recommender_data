@@ -93,7 +93,8 @@ class Tasks:
 
         
         model = ml.trainModelKFold(trainData, target)
-        #ml.showConfusionMatrix(model,x_test,y_test)
+        #this method shows a confusion matrix.
+        ml.showConfusionMatrix(model,trainData,target)
 
         kaggle_dataset = pd.read_csv(pathPred, usecols=["id", "name","artists","danceability","energy","key","loudness","mode","speechiness","acousticness","instrumentalness","liveness","valence","tempo","time_signature"])
 
@@ -159,5 +160,5 @@ class Tasks:
                 sep=",", header=False, index=False)
             print(quack_location_type.QuackLocationType(locationint).name + " pictures fetched \n")
             sleep(10)
-            #print(predicted_kaggleset.loc[predicted_kaggleset['location'] == 'night_life'])
+
         
