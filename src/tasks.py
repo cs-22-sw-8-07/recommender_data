@@ -92,11 +92,6 @@ class Tasks:
         trainData = ml.ML_preprocessing(fullcsv)
 
         
-
-        #x_train, x_test, y_train, y_test = train_test_split(trainData, target, test_size=0.1)
-
-
-        #model = ml.trainModelSingle(x_train, y_train, x_test, y_test)
         model = ml.trainModelKFold(trainData, target)
         #ml.showConfusionMatrix(model,x_test,y_test)
 

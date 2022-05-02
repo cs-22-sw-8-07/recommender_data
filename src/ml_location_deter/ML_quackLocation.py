@@ -1,3 +1,4 @@
+from distutils.ccompiler import show_compilers
 from ntpath import join
 from sklearn import metrics
 import tensorflow as tf
@@ -15,6 +16,7 @@ from sklearn.model_selection import KFold, StratifiedKFold, cross_val_score
 from keras.layers import Dense
 from keras import regularizers
 from sklearn.ensemble import VotingClassifier
+from keras.utils.vis_utils import plot_model
 
 class AddLocationtoKaggle:
 
@@ -85,10 +87,7 @@ class AddLocationtoKaggle:
         top_acc_index = sorted(range(len(accuracy_per_fold)), key=lambda x: accuracy_per_fold[x])[-1:]
 
         model1 = keras.models.load_model('../recommender_data/ml_models/model_foldnum_' + str(top_acc_index[0]+1))
-        # model2 = keras.models.load_model('../recommender_data/ml_models/model_foldnum_' + str(top_acc_index[1]+1))
-        # model3 = keras.models.load_model('../recommender_data/ml_models/model_foldnum_' + str(top_acc_index[2]+1))
-        # ensemble = VotingClassifier(estimators=[model1, model2, model3], voting='soft')
-        # ensemble.fit(traindata, target)
+
         return model1
     
     def showConfusionMatrix(model,x_test,y_test):
