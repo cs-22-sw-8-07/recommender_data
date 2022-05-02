@@ -17,9 +17,11 @@ from range_model.range_recommender import RangeRecommender
 
 
 def main(argv):
+
     error_no = 0
     base_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
     token: str = argv[0]
+
 
     match argv[1]:
         case "dataset":
@@ -65,12 +67,14 @@ def main(argv):
             # but we want to skip unknown.
             for location in range(len(quack_location_type.QuackLocationType)):
                 # checks if the location type is type unknown and skips if so.
-                print(quack_location_type.QuackLocationType(location).name)
                 if quack_location_type.QuackLocationType(location).name == "unknown":
                     continue
-                rec.get_playlist(QuackLocationType(location), token, base_folder)
-        case _:
-            raise Exception("Argument2NotARecommender")
+                rec.get_playlist(QuackLocationType(location), token)
+        
+        case "machine":
+            TaskMaster = Tasks(token)
+            TaskMaster.task3_ML_on_kaggle()
+
 
 
 if __name__ == "__main__":

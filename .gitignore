@@ -2,3 +2,4 @@ __pycache__
 bin
 .idea
 *.cnf
+ml_models/
