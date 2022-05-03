@@ -90,7 +90,7 @@ class RangeModel:
         # Get the tracks that is within the range filter, and closest to the average vector
         key = location_type.name
 
-        # Intialize the filter as being so lenient that it does not filter away and songs
+        # Intialize the filter as being so lenient that it does not filter away any songs
         filter_bottom = [-9999.0 for _ in range(0, self._track_data.size_of_vecs())]
         filter_top = [9999.0 for _ in range(0, self._track_data.size_of_vecs())]
 
