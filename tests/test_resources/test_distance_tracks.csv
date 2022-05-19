@@ -1,0 +1,21 @@
+id,name,popularity,duration_ms,explicit,artists,id_artists,release_date,danceability,energy,key,loudness,mode,speechiness,acousticness,instrumentalness,liveness,valence,tempo,time_signature
+35iwgR4jXetI318WEWsa1Q,Song 1,6,126903,0,['Artist 1'],['45tIt06XoI0Iio4LBEVpls'],1922-02-22,0.4,0.5,0,-7.1,1,0.05,0.2,0.0,0.3,128.3,0.2,3
+021ht4sdgPcrDgSk7JTbKY,Song 2,0,98200,0,['Artist 2'],['14jtPCOoNZwquk5wd9DxrY'],1922-06-01,0.41,0.5,0,-7.1,1,0.05,0.2,0.0,0.3,128.3,0.2,1
+07A5yehtSnoedViJAZkNnc,Song 3,0,181640,0,"['Artist 3','Additional Artist']","['5LiOoJbxVSAMkBS2fUm3X2','3BiJGZsyX9sJchTqcSA7Su']",1922-03-21,0.42,0.5,1,-7.1,1,0.05,0.2,0.0,0.3,128.3,0.2,5
+08FmqUhxtyLTn6pAh6bk45,Song 4,0,176907,0,['Artist 4'],['5LiOoJbxVSAMkBS2fUm3X2'],1922-03-21,0.43,0.5,7,-7.1,1,0.05,0.2,0.0,0.3,128.3,0.2,3
+08y9GfoqCWfOGsKdwojr5e,Song 5,0,163080,0,['Artist 5'],['3BiJGZsyX9sJchTqcSA7Su'],1922,0.44,0.5,3,-7.1,0,0.05,0.2,0.0,0.3,128.3,0.2,4
+0BRXJHRNGQ3W4v9frnSfhu,Song 6,0,178933,0,['Artist 6'],['3BiJGZsyX9sJchTqcSA7Su'],1922,0.45,0.5,5,-7.1,1,0.05,0.2,0.0,0.3,128.3,0.2,4
+0Dd9ImXtAtGwsmsAD69KZT,Song 7,0,134467,0,['Artist 7'],['2nuMRGzeJ5jJEKlfS7rZ0W'],1922,0.46,0.5,4,-7.1,1,0.05,0.2,0.0,0.3,128.3,0.2,5
+0IA0Hju8CAgYfV1hwhidBH,Song 8,0,161427,0,['Artist 8'],['4AxgXfD7ISvJSTObqm4aIE'],1922,0.47,0.5,4,-7.1,1,0.05,0.2,0.0,0.3,128.3,0.2,3
+0IgI1UCz84pYeVetnl1lGP,Song 9,0,310073,0,['Artist 9'],['5nWlsH5RDgFuRAiDeOFVmf'],1922,0.48,0.5,0,-7.1,0,0.05,0.2,0.0,0.3,128.3,0.2,4
+0JV4iqw2lSKJaHBQZ0e5zK,Song 10,0,181173,0,['Artist 10'],['5LiOoJbxVSAMkBS2fUm3X2'],1922-03-29,0.5,0.5,6,-7.1,1,0.05,0.2,0.0,0.3,128.3,0.2,3
+0OYGe21oScKJfanLyM7daU,Song 11,0,99100,0,['Artist 11'],['14jtPCOoNZwquk5wd9DxrY'],1922-06-01,0.69,0.71,11,-6.21,0,0.091,0.95,0.0048,0.17,123.34,0.61,3
+0PE42H6tslQuyMMiGRiqtb,Song 12,0,132700,0,['Artist 12'],['14jtPCOoNZwquk5wd9DxrY'],1922-06-01,0.69,0.71,2,-6.21,1,0.091,0.85,0.0048,0.17,123.34,0.61,3
+0PH9AACae1f957JAavhOl2,Song 13,0,157333,0,['Artist 13'],['45tIt06XoI0Iio4LBEVpls'],1922-02-22,0.69,0.71,1,-6.21,1,0.091,0.8,0.0048,0.17,123.34,0.61,4
+0QiT0Oo5QdLXdFw6RDOj7h,Song 14,1,186800,0,['Artist 14'],['4mSouLpNSEY1d7OdIjlFiP'],1922,0.69,0.71,0,-6.21,1,0.091,0.7,0.0048,0.17,123.34,0.61,4
+0TWsNj5iSvbMTtbEDP7A4V,Song 15,0,172027,0,['Artist 15'],['7DIlOK9L8d0IQ7Xk8aJxDW'],1922,0.69,0.71,2,-6.21,1,0.091,0.6,0.0048,0.17,123.34,0.61,4
+0cC9CYjLRIzwchQ42xVnq6,Song 16,0,96600,0,['Artist 16'],['14jtPCOoNZwquk5wd9DxrY'],1922-06-01,0.69,0.71,4,-6.21,0,0.091,0.5,0.0048,0.17,123.34,0.61,1
+0eb1PfHxT6HnXvvdUOzmME,Song 17,0,103200,0,['Artist 17'],['14jtPCOoNZwquk5wd9DxrY'],1922-06-01,0.69,0.71,8,-6.21,1,0.091,0.4,0.0048,0.17,123.34,0.61,3
+0grXU6GKVNCVMJbseA0Uhe,Song 18,0,95800,0,['Artist 18'],['14jtPCOoNZwquk5wd9DxrY'],1922-06-01,0.69,0.71,2,-6.21,1,0.091,0.3,0.0048,0.17,123.34,0.61,1
+0kCB1bDVBC8gWCFcnJyIZc,Song 19,0,188000,0,['Artist 19'],['7vVR02JJYvsEAEPNHQMx0Q'],1922,0.69,0.71,5,-6.21,1,0.091,0.2,0.0048,0.17,123.34,0.61,4
+0l3BQsVJ7F76wlN5QhJzaP,Song 20,0,153533,0,['Artist 20'],['5LiOoJbxVSAMkBS2fUm3X2'],1922-03-21,0.69,0.71,2,-6.21,1,0.091,0.1,0.0048,0.17,123.34,0.61,4
